@@ -1,24 +1,46 @@
-# Changelog
+# terraform-aws-ec2-AUY1105-antonia
 
-Todos los cambios importantes de este módulo serán documentados en este archivo.
+Módulo Terraform para la creación de recursos de cómputo en AWS, desarrollado para la Evaluación Parcial N°2 de la asignatura AUY1105 - Infraestructura como Código II.
 
-El formato está basado en Semantic Versioning: MAJOR.MINOR.PATCH.
+## Objetivo del repositorio
 
-## [1.0.0] - 2026-05-28
+Este repositorio contiene un módulo reutilizable de Terraform encargado de crear una instancia EC2 en AWS.
 
-### Added
-- Creación del módulo Terraform para cómputo.
-- Implementación de instancia EC2.
-- Implementación de IAM Role e IAM Instance Profile para la instancia.
-- Parametrización de AMI, tipo de instancia, subnet y security groups.
-- Definición de outputs para `instance_id`, `instance_ip`, `instance_private_ip` e `iam_instance_profile_name`.
-- Incorporación de archivo `versions.tf` con versiones requeridas de Terraform y proveedor AWS.
+El módulo permite crear:
 
-## [0.1.0] - 2026-05-28
+- Una instancia EC2.
+- Un IAM Role para EC2.
+- Un IAM Instance Profile.
+- Configuración de monitoreo.
+- Configuración de volumen raíz cifrado.
+- Configuración de metadata options con IMDSv2 obligatorio.
 
-### Added
-- Estructura inicial del repositorio.
-- Archivos base: `main.tf`, `variables.tf`, `outputs.tf`, `versions.tf`, `README.md`, `CHANGELOG.md` y `.gitignore`.
+## Propósito del módulo
+
+El propósito de este módulo es desacoplar la configuración de cómputo del repositorio principal de infraestructura, permitiendo reutilizar el código en distintos proyectos o ambientes.
+
+Este módulo forma parte de la modularización del código trabajado en la Evaluación Parcial N°1.
+
+## Recursos creados
+
+| Recurso | Descripción |
+|---|---|
+| `aws_instance` | Crea la instancia EC2 |
+| `aws_iam_role` | Crea el rol IAM para EC2 |
+| `aws_iam_instance_profile` | Asocia el rol IAM a la instancia |
+
+## Uso básico
+
+```hcl
+module "computo" {
+  source = "github.com/AntoPerez123/terraform-aws-ec2-AUY1105-antonia?ref=v1.0.0"
+
+  project_name       = "auy1105-antonia"
+  ami_id             = "ami-0c02fb55956c7d316"
+  instance_type      = "t2.micro"
+  subnet_id          = module.redes.subnet_ids[0]
+  security_group_ids = [module.redes.security_group_id]
+}
 
 Requisitos
 Herramienta	Versión
@@ -29,7 +51,7 @@ Instrucciones de uso
 Configurar credenciales de AWS.
 Crear o utilizar una VPC, subnet y security group existentes.
 Llamar al módulo usando el bloque module.
-Ejecutar:
+Ejecutar los comandos:
 terraform init
 terraform validate
 terraform plan
@@ -40,6 +62,8 @@ Este módulo utiliza versionado semántico.
 
 v0.1.0: estructura inicial del módulo.
 v1.0.0: versión estable del módulo de cómputo.
+
+
 Autora
 
 Antonia Pérez
